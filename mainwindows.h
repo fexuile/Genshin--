@@ -10,6 +10,8 @@
 #include <QTimer>
 
 #include "config.h"
+#include "rulewindow.h"
+#include "gamewindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainwindows; }
@@ -26,5 +28,7 @@ private:
     Ui::mainwindows *ui;
     QLabel *Background;
     QSound *mainSound;
+    rulewindow *Rulepage;
+    gamewindow *GameState;
 };
 #endif // MAINWINDOWS_H
