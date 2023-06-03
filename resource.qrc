@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>images/genshin.jpg</file>
+        <file>images/Star_rail.png</file>
+    </qresource>
+    <qresource prefix="/media">
+        <file>medias/clickbutton.wav</file>
+    </qresource>
+</RCC>
