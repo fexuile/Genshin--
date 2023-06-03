@@ -14,6 +14,7 @@ SOURCES += \
     mainwindows.cpp
 
 HEADERS += \
+    config.h \
     mainwindows.h
 
 FORMS += \

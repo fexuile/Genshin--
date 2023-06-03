@@ -9,6 +9,8 @@
 #include <QSound>
 #include <QTimer>
 
+#include "config.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainwindows; }
 QT_END_NAMESPACE
@@ -20,11 +22,9 @@ public:
     mainwindows(QWidget *parent = nullptr);
     ~mainwindows();
 
-private slots:
-    void on_pushButton_clicked();
-
 private:
     Ui::mainwindows *ui;
+    QLabel *Background;
     QSound *mainSound;
 };
 #endif // MAINWINDOWS_H
