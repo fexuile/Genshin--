@@ -28,7 +28,7 @@ private:
     Ui::mainwindows *ui;
     QLabel *Background;
     QSound *mainSound;
-    rulewindow *Rulepage;
-    gamewindow *GameState;
+    rulewindow *Rule_Page;
+    gamewindow *New_Game;
 };
 #endif // MAINWINDOWS_H

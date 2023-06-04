@@ -38,10 +38,14 @@ mainwindows::mainwindows(QWidget *parent)
 
     /*Click Button and Slog*/
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
-
+    New_Game = new gamewindow();
+    ui->stackedWidget->addWidget(New_Game);
+    Rule_Page = new rulewindow();
+    ui->stackedWidget->addWidget(Rule_Page);
 
     connect(ui->BeginButton,&QPushButton::clicked,[=](){
         ClickSound->play();
+        ui->stackedWidget->setCurrentWidget(New_Game);
     });
 
     connect(ui->LoadButton,&QPushButton::clicked,[=](){
@@ -50,8 +54,11 @@ mainwindows::mainwindows(QWidget *parent)
 
     connect(ui->RuleButton,&QPushButton::clicked,[=](){
         ClickSound->play();
+        ui->stackedWidget->setCurrentWidget(Rule_Page);
     });
-
+    connect(Rule_Page,&rulewindow::closeWindow,[=](){
+        ui->stackedWidget->setCurrentWidget(ui->main);
+    });
     connect(ui->EndButton,&QPushButton::clicked,[=](){
         ClickSound->play();
         QTimer::singleShot(200,this,&QWidget::close);

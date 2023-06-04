@@ -12,7 +12,7 @@ class gamewindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit gamewindow(int level = 0, QWidget *parent = nullptr);
+    explicit gamewindow(int level = 1, QWidget *parent = nullptr);
     ~gamewindow();
 
 private:

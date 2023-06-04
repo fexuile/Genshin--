@@ -4,6 +4,7 @@
         <file>images/Star_rail.png</file>
         <file>images/icon.png</file>
         <file>images/bg.jpg</file>
+        <file>images/Rule.png</file>
     </qresource>
     <qresource prefix="/media">
         <file>medias/clickbutton.wav</file>
