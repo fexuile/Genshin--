@@ -19,6 +19,7 @@ HEADERS += \
     config.h \
     gamewindow.h \
     mainwindows.h \
+    role.h \
     rulewindow.h
 
 FORMS += \

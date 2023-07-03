@@ -14,27 +14,27 @@ mainwindows::mainwindows(QWidget *parent)
     /*BackGround*/
     Background = new QLabel(this);
     Background->setGeometry(0,0,MAX_WINDOWS_WEIGHT,MAX_WINDOWS_HEIGHT);
-    Background->setPixmap(QPixmap(":/image/images/bg.jpg"));
+    Background->setPixmap(QPixmap(":/image/images/background.jpg"));
     Background->setScaledContents(true);
     Background->lower();
 
     /*Button Size and Geometry*/
 
     ui->BeginButton->setFixedSize(BUTTON_WEIGHT,BUTTON_HEIGHT);
-    ui->BeginButton->move(110,550);
-    ui->BeginButton->setFlat(true);
+    ui->BeginButton->move(700,400);
+//    ui->BeginButton->setFlat(true);
 
     ui->LoadButton->setFixedSize(BUTTON_WEIGHT,BUTTON_HEIGHT);
-    ui->LoadButton->move(110,650);
-    ui->LoadButton->setFlat(true);
+    ui->LoadButton->move(700,500);
+//    ui->LoadButton->setFlat(true);
 
     ui->RuleButton->setFixedSize(BUTTON_WEIGHT,BUTTON_HEIGHT);
-    ui->RuleButton->move(110,750);
-    ui->RuleButton->setFlat(true);
+    ui->RuleButton->move(700,600);
+//    ui->RuleButton->setFlat(true);
 
     ui->EndButton->setFixedSize(BUTTON_WEIGHT,BUTTON_HEIGHT);
-    ui->EndButton->move(110,850);
-    ui->EndButton->setFlat(true);
+    ui->EndButton->move(700,700);
+//    ui->EndButton->setFlat(true);
 
     /*Click Button and Slog*/
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);

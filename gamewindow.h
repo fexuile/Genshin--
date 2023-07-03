@@ -2,6 +2,8 @@
 #define GAMEWINDOW_H
 
 #include <QWidget>
+#include <QLabel>
+#include "role.h"
 
 namespace Ui {
 class gamewindow;
@@ -12,11 +14,19 @@ class gamewindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit gamewindow(int level = 1, QWidget *parent = nullptr);
+    int level;
+    explicit gamewindow(int LEVEL = 1, QWidget *parent = nullptr);
+    void set_player();
     ~gamewindow();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     Ui::gamewindow *ui;
+    QLabel *Background;
+    Monster* Boss;
+    Player* player[4];
 };
 
 #endif // GAMEWINDOW_H
