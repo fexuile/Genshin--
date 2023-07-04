@@ -2,6 +2,20 @@
     <qresource prefix="/image">
         <file>images/genshin.jpg</file>
         <file>images/Star_rail.png</file>
+        <file>images/icon.png</file>
+        <file>images/bg.jpg</file>
+        <file>images/Rule.png</file>
+        <file>images/Mona.png</file>
+        <file>images/ying.png</file>
+        <file>images/background.jpg</file>
+        <file>images/back.png</file>
+        <file>images/laopo.png</file>
+        <file>images/diluke.png</file>
+        <file>images/boss1.png</file>
+        <file>images/element0.png</file>
+        <file>images/element1.png</file>
+        <file>images/element2.png</file>
+        <file>images/element3.png</file>
     </qresource>
     <qresource prefix="/media">
         <file>medias/clickbutton.wav</file>
