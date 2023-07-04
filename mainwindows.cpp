@@ -1,5 +1,7 @@
 #include "mainwindows.h"
 #include "ui_mainwindows.h"
+#include <iostream>
+#include <fstream>
 
 
 mainwindows::mainwindows(QWidget *parent)
@@ -40,6 +42,9 @@ mainwindows::mainwindows(QWidget *parent)
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
     New_Game = new gamewindow();
     ui->stackedWidget->addWidget(New_Game);
+
+
+    ui->stackedWidget->addWidget(New_Game);
     Rule_Page = new rulewindow();
     ui->stackedWidget->addWidget(Rule_Page);
 
@@ -47,9 +52,24 @@ mainwindows::mainwindows(QWidget *parent)
         ClickSound->play();
         ui->stackedWidget->setCurrentWidget(New_Game);
     });
+    connect(New_Game,&gamewindow::closeWindow,[=]()
+            {
+        ui->stackedWidget->setCurrentWidget(ui->main);
+            });
 
     connect(ui->LoadButton,&QPushButton::clicked,[=](){
         ClickSound->play();
+        std::ifstream read;
+        read.open("data.txt");
+        if(read.fail()){// 没有存档
+            QTimer::singleShot(200,this,&QWidget::close);
+        }
+        else{
+            int Save_level;
+            read >> Save_level;
+            Load_Game = new gamewindow(Save_level);
+            ui->stackedWidget->setCurrentWidget(Load_Game);
+        }
     });
 
     connect(ui->RuleButton,&QPushButton::clicked,[=](){

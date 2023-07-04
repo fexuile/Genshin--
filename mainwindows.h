@@ -29,6 +29,6 @@ private:
     QLabel *Background;
     QSound *mainSound;
     rulewindow *Rule_Page;
-    gamewindow *New_Game;
+    gamewindow *New_Game, *Load_Game;
 };
 #endif // MAINWINDOWS_H

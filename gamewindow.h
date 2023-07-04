@@ -21,7 +21,8 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-
+signals:
+    void closeWindow(void);
 private:
     Ui::gamewindow *ui;
     QLabel *Background;
