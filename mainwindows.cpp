@@ -13,12 +13,15 @@ mainwindows::mainwindows(QWidget *parent)
     this->setWindowTitle("Genshin: Star Rail");
     this->setWindowIcon(QIcon(":/image/images/icon.png"));
 
-    /*BackGround*/
+    /*BackGround and BGM*/
     Background = new QLabel(this);
     Background->setGeometry(0,0,MAX_WINDOWS_WEIGHT,MAX_WINDOWS_HEIGHT);
     Background->setPixmap(QPixmap(":/image/images/background.jpg"));
     Background->setScaledContents(true);
     Background->lower();
+    MainSound=new QSound(":/media/medias/bgm.wav",this);
+    MainSound->setLoops(QSound::Infinite);
+    MainSound->play();
 
     /*Button Size and Geometry*/
 

@@ -19,5 +19,6 @@
     </qresource>
     <qresource prefix="/media">
         <file>medias/clickbutton.wav</file>
+        <file>medias/bgm.wav</file>
     </qresource>
 </RCC>
