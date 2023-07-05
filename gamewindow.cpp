@@ -83,7 +83,6 @@ void gamewindow::paintEvent(QPaintEvent* event){
     QRectF rect4_hp(C4_W,C1_H-15,hp[3],15);
     QRectF rect5_hp(BOSS_W,BOSS_H-15,hp[4],15);
     QRectF rect6_hp(BOSS_W,BOSS_H-30,shield_cv,15);
-    Boss->has_element = 0;
 
     Painter.drawPixmap(C1_W,C1_H,CARD_W,CARD_H,QPixmap(":/image/images/Mona.png"));
     Painter.drawPixmap(C1_W-30,C1_H,30,30,QPixmap(":/image/images/element0.png"));
