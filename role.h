@@ -50,7 +50,7 @@ public:
     virtual void attack(person* enemy){
         if(shield > 0){
             hp -= 0.5 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element]: 1);
-            shield -= enemy->atk * (1 + (~has_element?shield_react[enemy->element_type][has_element]:0));
+            shield -= enemy->atk * (1 + (~has_element ? shield_react[enemy->element_type][has_element]:0));
             if(shield <= 0){
                 hp -= 0.2 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element]: 1);
                 shield_time = 5;

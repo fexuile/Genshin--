@@ -91,14 +91,11 @@ void gamewindow::mousePressEvent(QMouseEvent *event){
             if(!used[0] && player[0]->hp > 0){
                 used[0] = 1;
                 if(checkround()){
-//                    unused.clear();
-//                    for(int i=0;i<4;i++)
-//                        if(player[i]->hp > 0)unused.push_back(i);
-//                    int r = std::rand() * std::rand() % unused.size();
+
                 }
             }
         }
-        if(mouse_x >= C2_W && mouse_x <= C2_W+CARD_W && mouse_y >= C2_H && mouse_y <= C2_H + CARD_H){
+        if(mouse_x >= C2_W && mouse_x <= C2_W+CARD_W && mouse_y >= C2_H && mouse_y <= C2_H + CAR    D_H){
             if(!used[1] && player[1]->hp > 0){
                 Boss->attack(player[1]);
                 used[1] = 1;
