@@ -5,9 +5,14 @@
 #include <QLabel>
 #include "config.h"
 #include <QString>
+#include <QMouseEvent>
+#include <vector>
+#include <iostream>
 #include <QSound>
+#include <QDebug>
 
 Monster* Make_boss(int level);
+int Round = 0;
 void gamewindow::set_player(){
     player[0] = new Player(0, 15, 2, 0.8);
     player[1] = new Player(1, 12,3,0.6);
@@ -15,12 +20,21 @@ void gamewindow::set_player(){
     player[3] = new Player(3, 10, 1, 0.3);
 }
 
+bool gamewindow::game_end(){
+    if(Boss->hp == 0)return true;
+    for(int i=0;i<4;i++)
+        if(player[i]->hp > 0)return false;
+    return true;
+}
+
 gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::gamewindow)
 {
+    this->setMouseTracking(true);
     this->level = LEVEL;
     this->set_player();
+    clicked = false;
     Boss = Make_boss(level);
     ui->setupUi(this);
 //UI Designed:
@@ -34,7 +48,6 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
                 ClickSound->play();
                 emit closeWindow();
             });
-
 
 }
 
@@ -59,17 +72,77 @@ Monster* Make_boss(int level){
     return Boss;
 }
 
+bool used[4];
+
+bool gamewindow::checkround(){
+    for(int i=0;i<4;i++)
+        if(player[i]->hp >0 && !used[i])return false;
+    for(int i=0;i<4;i++)used[i] = 0;
+    Round++;
+    return true;
+}
+//std::vector<int>unused;
+
+void gamewindow::mousePressEvent(QMouseEvent *event){
+    mouse_x = event->x();
+    mouse_y = event->y();
+    if(Qt::LeftButton == event->button()){
+        if(mouse_x >= C1_W && mouse_x <= C1_W+CARD_W && mouse_y >= C1_H && mouse_y <= C1_H + CARD_H){
+            if(!used[0] && player[0]->hp > 0){
+                used[0] = 1;
+                if(checkround()){
+
+                }
+            }
+        }
+        if(mouse_x >= C2_W && mouse_x <= C2_W+CARD_W && mouse_y >= C2_H && mouse_y <= C2_H + CAR    D_H){
+            if(!used[1] && player[1]->hp > 0){
+                Boss->attack(player[1]);
+                used[1] = 1;
+                if(checkround()){
+
+                }
+            }
+        }
+        if(mouse_x >= C3_W && mouse_x <= C3_W+CARD_W && mouse_y >= C3_H && mouse_y <= C3_H + CARD_H){
+            if(!used[2] && player[2]->hp > 0){
+                Boss->attack(player[2]);
+                used[2] = 1;
+                if(checkround()){
+
+                }
+            }
+        }
+        if(mouse_x >= C4_W && mouse_x <= C4_W+CARD_W && mouse_y >= C4_H && mouse_y <= C4_H + CARD_H){
+            if(!used[3] && player[3]->hp > 0){
+                Boss->attack(player[3]);
+                used[3] = 1;
+                if(checkround()){
+
+                }
+            }
+        }
+        repaint();
+    }
+}
+
 void gamewindow::paintEvent(QPaintEvent* event){
     QPainter Painter(this);
     std::string string_hp[6];
-    int hp[5], shield_cv =CARD_W * Boss->shield / Boss->shield_hp;
+    Boss->shield = std::max((int)Boss->shield_hp, 0);
+    int hp[5], shield_cv = (CARD_W * Boss->shield / Boss->shield_hp);
     for(int i=0;i<4;i++){
-        hp[i] = CARD_W * player[i]->hp / player[i]->all_hp;
+        player[i] -> hp = std::max(0,int(player[i]->hp));
+        hp[i] = CARD_W * player[i] -> hp / player[i]->all_hp;
         string_hp[i] = std::to_string((int)player[i]->hp) + "/" + std::to_string((int)player[i]->all_hp);
     }
-    hp[4] = CARD_W * Boss->hp / Boss->all_hp;
+    Boss->hp = std::max(0, int(Boss->hp));
+    hp[4] = CARD_W * Boss->hp / Boss->all_hp ;
     string_hp[4] = std::to_string((int)Boss->hp) + "/" + std::to_string((int)Boss->all_hp);
     string_hp[5] = std::to_string((int)Boss->shield) + "/" + std::to_string((int)Boss->shield_hp);
+
+    for(int i=0;i<5;i++)
+        qDebug()<<hp[i];
 
     QRectF rect1(C1_W,C1_H-15,CARD_W,15);
     QRectF rect2(C2_W,C1_H-15,CARD_W,15);
