@@ -37,28 +37,68 @@ void Player::under_attack(person* enemy)
     hp -= enemy->atk * this->def;
 }
 
-void Qiqi::attack(vector<person*> enemys)
+void Player::attack(vector<person*> enemys)
 {
+    if (players.size() > 1)
+        qWarning("default attack fault : too many objects");    
     for (auto enemy : enemys)
         enemy -> under_attack(this);
 }
 
+void Player::action(my_genshin* game)
+{
+    pair<int, vector<person*> > act = make_pair(0, vector<person*>());
+    if (act.first == 0) {
+        this -> attack(act.second);
+    } else {
+        this -> skill(act.second);
+    }
+}
+
 void Qiqi::skill(vector<person*> players)
 {
+    if (players.size() > 1)
+        qWarning("Qiqi skill fault : too many objects");    
     for (auto player : players) {
         player -> hp += all_hp * 0.1;
         player -> hp = max(player -> hp, player -> all_hp);
     }
 }
 
-void Qiqi::action(my_genshin* game)
+void Keqin::skill(vector<person*> players)
 {
-    pair<int, vector<person*> > act = make_pair(0, vector<person*>());
-    if (act.first == 0) {
-        attack(act.second);
-    } else {
-        skill(act.second);
+    if (players.size() > 1)
+        qWarning("Keqin skill fault : too many objects");
+    for (auto player : players) {
+        if (player->add_atk.second <= 0)
+            player->atk += atk / 3;
+        player -> add_atk = make_pair(atk / 3, 2);
+        player -> mv_len = 0;
+    }    
+}
+
+void Laoyang::skill(vector<person*> enemys)
+{
+    for (auto enemy : enemys) {
+        enemy -> under_attack(this);
+        enemy -> mv_len *= 1.2;
     }
+}
+
+void Zhongli::skill(vector<person*> players)
+{
+    for (auto player : players) {
+        player -> dec_dmg = make_pair(0.3, 2);
+    } 
+}
+
+void Xinhai::skill(vector<person*> players)
+{
+    for (auto player : players) {
+        if (player -> add_speed.second <= 0)
+            player -> speed *= 1.3;
+        player -> add_speed = make_pair(0.3, 2);
+    }    
 }
 
 void Monster::under_attack(person* enemy)
@@ -161,16 +201,24 @@ vector<pair<double, person*> > my_genshin::get_mv_list()
         mv_list.push_back(make_pair(player->mv_len / player->speed, player));
     mv_list.push_back(make_pair(Boss->mv_len / Boss->speed, Boss));
     sort(mv_list.begin(), mv_list.end());
+    return mv_list;
 }
 
 void my_genshin::run_game()
 {
+    round = 0;
+    lst_time = 100;
     while (1) {
         auto p = (*get_mv_list().begin());
         p.second -> action();
+
         for (auto player : players)
             player->mv_len -= player->speed * p.first;
         Boss -> mv_len -= Boss->speed * p.first;
         p.second -> mv_len = 1e4;    
+        while (lst_time < p.first) {
+            ++round; lst_time += 100;
+        }
+        lst_time -= p.first;
     }
 }
