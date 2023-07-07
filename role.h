@@ -30,6 +30,7 @@ public:
     pair<double, int> add_speed, dec_speed, dec_dmg, vulnerable;
     int atk;
     double def;
+    string name;
     virtual void under_attack(person* enemy)=0;
     virtual void action(my_genshin* game)=0; //获取决策（从客户端/bot）
     virtual void end_round(); //回合结束
@@ -48,8 +49,9 @@ public:
 //技能：回血
 class Qiqi:public Player {
 public:
-    //技能：回复单体生命值
+    //技能：回复群体生命值
     Qiqi(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -64,6 +66,7 @@ public:
 class Keqin:public Player {
     public:
     Keqin(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -78,6 +81,7 @@ class Keqin:public Player {
 class Laoyang:public Player {
     public:
     Laoyang(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -92,6 +96,7 @@ class Laoyang:public Player {
 class Zhongli:public Player {
     public:
     Zhongli(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -106,6 +111,7 @@ class Zhongli:public Player {
 class Xinhai:public Player {
     public:
     Xinhai(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;

@@ -18,6 +18,15 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     ui->backButton->move(1520,20);
     ui->backButton->setFixedSize(BACKBUTTON_WEIGHT,BACKBUTTON_HEIGHT);
     ui->backButton->setStyleSheet("QPushButton{border-image: url(:/image/images/back.png);}");
+    ui->A->move(1460,700);
+    ui->A->setFixedSize(ATTACK_BUTTON_WEIGHT,ATTACK_BUTTON_HEIGHT);
+    ui->A->setStyleSheet("QPushButton{border-image: url(:/image/images/A.png);}");
+
+    ui->R->move(1460,800);
+    ui->R->setFixedSize(ATTACK_BUTTON_WEIGHT,ATTACK_BUTTON_HEIGHT);
+    ui->R->setStyleSheet("QPushButton{border-image: url(:/image/images/R.png);}");
+
+
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
 
     connect(ui->backButton,&QPushButton::released,[=]()
@@ -91,5 +100,14 @@ void gamewindow::paintEvent(QPaintEvent* event){
     if(~game->Boss->has_element){
         std::string element_name = ":/image/images/element" + std::to_string(game->Boss->has_element);
         Painter.drawPixmap(BOSS_W,BOSS_H - 60, 30,30,QString::fromStdString(element_name));
+    }
+
+    std::vector<pair<double, person*> > mv_list = game->get_mv_list();
+    int X = MV_W, Y = MV_H;
+    for(auto now: mv_list){
+        auto p = now.second;
+        string name = ":/image/images/" + p->name;
+        Painter.drawPixmap(X, Y,60,60,QString::fromStdString(name));
+        Y += 80;
     }
 }

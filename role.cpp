@@ -181,6 +181,7 @@ Monster* Make_boss(int level){
         Boss->def = 0.1;
         Boss->element_type = 1;
         Boss->shield_time = 0;
+        Boss->name = "smallboss1";
         return Boss;
     }
     if(level == 2){
