@@ -27,7 +27,7 @@ public:
     //效果及其剩余回合数
     //增加攻击，加速，减速，减伤，易伤
     pair<int, int> add_atk;
-    pair<double, int> add_speed, dec_speed, dec_dmg, vulnerable;;
+    pair<double, int> add_speed, dec_speed, dec_dmg, vulnerable;
     int atk;
     double def;
     virtual void under_attack(person* enemy)=0;
@@ -43,15 +43,40 @@ public:
     virtual void attack();
     virtual void skill();
     virtual void action();
+    virtual void attack(vector<person*> enemys);
+    virtual void skill(vector<person*> enemys) ;
+    virtual void action(my_genshin* game);
 };
 
-//技能，回血
+//技能：回血
 class Qiqi:public Player {
 public:
     //技能：回复单体生命值
-    virtual void attack(vector<person*> enemys);
     virtual void skill(vector<person*> players);
-    virtual void action(my_genshin* game);
+};
+
+//技能：指定我方单体使其行动提前100%并增加攻击力2回合
+class Keqin:public Player {
+    public:
+    virtual void skill(vector<person*> players);
+};
+
+//技能：对敌方全体造成伤害并减速30%
+class Laoyang:public Player {
+    public:
+    virtual void skill(vector<person*> enemys);
+};
+
+//技能：使我方全体角色减伤30%,持续2回合
+class Zhongli:public Player {
+    public:
+    virtual void skill(vector<person*> players);
+};
+
+//技能：使我方全体角色加速30%,持续2回合
+class Xinhai:public Player {
+    public:
+    virtual void skill(vector<person*> players);
 };
 
 class Monster:public person{
@@ -85,6 +110,7 @@ class my_genshin
 {
 public:
     int level;
+    int round, lst_time;
     person* Boss;
     vector<person*> players;
 
