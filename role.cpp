@@ -71,12 +71,11 @@ void Qiqi::skill(vector<person*> players)
 
 void Qiqi::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
+    //pair<int, vector<person*> > act = make_pair(type, game -> players);
     if (act.first == 0) {
-        this -> attack(act.second);
+        this -> attack(make_pair(type, vector<person*>(1, game -> Boss)));
     } else {
-
-        this -> skill(act.second);
+        this -> skill(make_pair(type, game -> players););
     }
 }
 
@@ -113,13 +112,11 @@ void Laoyang::skill(vector<person*> enemys)
 
 void Laoyang::action(int type, my_genshin* game)
 {
-    vector<person*>enemys;enemys.push_back(game->Boss);
-    pair<int, vector<person*> > act = make_pair(type, enemys);
     if (act.first == 0) {
-        this -> attack(act.second);
+        this -> attack(make_pair(type, vector<person*>(1, game -> Boss)));
     } else {
 
-        this -> skill(act.second);
+        this -> skill(make_pair(type, vector<person*>(1, game -> Boss)));
     }
 }
 
@@ -132,12 +129,10 @@ void Zhongli::skill(vector<person*> players)
 
 void Zhongli::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
     if (act.first == 0) {
-        this -> attack(act.second);
+        this -> attack(make_pair(type, vector<person*>(1, game -> Boss)));
     } else {
-
-        this -> skill(act.second);
+        this -> skill(make_pair(type, game -> players););
     }
 }
 
@@ -152,11 +147,10 @@ void Xinhai::skill(vector<person*> players)
 
 void Xinhai::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
     if (act.first == 0) {
-        this -> attack(act.second);
+        this -> attack(make_pair(type, vector<person*>(1, game -> Boss)));
     } else {
-        this -> skill(act.second);
+        this -> skill(make_pair(type, game -> players););
     }
 }
 
