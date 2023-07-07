@@ -45,7 +45,7 @@ public:
     virtual void under_attack(person* enemy);
     virtual void attack(vector<person*> enemys);
     virtual void skill(vector<person*> enemys){}
-    virtual void action(int type, my_genshin* game);
+    virtual void action(int type, my_genshin* game)=0;
 };
 
 //技能：回血
@@ -62,6 +62,7 @@ public:
         mv_len = 1e4 / speed;
     }
     void skill(vector<person*> players);
+    virtual void action(int type, my_genshin* game);
 };
 
 //技能：指定我方单体使其行动提前100%并增加攻击力2回合
@@ -77,6 +78,7 @@ class Keqin:public Player {
         mv_len = 1e4 / speed;
     }
     virtual void skill(vector<person*> players);
+    virtual void action(int type, my_genshin* game);
 };
 
 //技能：对敌方全体造成伤害并减速30%
@@ -92,6 +94,7 @@ class Laoyang:public Player {
         mv_len = 1e4 / speed;
     }
     virtual void skill(vector<person*> enemys);
+    virtual void action(int type, my_genshin* game);
 };
 
 //技能：使我方全体角色减伤30%,持续2回合
@@ -107,6 +110,7 @@ class Zhongli:public Player {
         mv_len = 1e4 / speed;
     }
     virtual void skill(vector<person*> players);
+    virtual void action(int type, my_genshin* game);
 };
 
 //技能：使我方全体角色加速30%,持续2回合
@@ -122,6 +126,7 @@ class Xinhai:public Player {
         mv_len = 1e4 / speed;
     }
     virtual void skill(vector<person*> players);
+    virtual void action(int type, my_genshin* game);
 };
 
 class Monster:public person{
@@ -166,6 +171,9 @@ public:
     Monster* Make_boss(int LEVEL);
     void run_game(); //游戏主进程
     void set_player();
+
+    //1 赢 0 没结果 -1 输
+    int judge_win();
 };
 
 namespace load_save
