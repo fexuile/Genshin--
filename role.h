@@ -38,8 +38,8 @@ public:
 class Player:public person{
 public:
     Player(){}
-    Player(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){}
-    virtual void under_attack(person* enemy){}
+    Player(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100);
+    virtual void under_attack(person* enemy);
     virtual void attack();
     virtual void skill();
     virtual void action();

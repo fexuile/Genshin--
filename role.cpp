@@ -161,6 +161,7 @@ vector<pair<double, person*> > my_genshin::get_mv_list()
         mv_list.push_back(make_pair(player->mv_len / player->speed, player));
     mv_list.push_back(make_pair(Boss->mv_len / Boss->speed, Boss));
     sort(mv_list.begin(), mv_list.end());
+    return mv_list;
 }
 
 void my_genshin::run_game()
