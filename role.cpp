@@ -1,5 +1,6 @@
 #include "role.h"
 #include "bot.h"
+#include <qDebug>
 
 void person::end_round()
 {
@@ -39,7 +40,7 @@ void Player::under_attack(person* enemy)
 
 void Player::attack(vector<person*> enemys)
 {
-    if (players.size() > 1)
+    if (enemys.size() > 1)
         qWarning("default attack fault : too many objects");    
     for (auto enemy : enemys)
         enemy -> under_attack(this);
@@ -49,9 +50,9 @@ void Player::action(my_genshin* game)
 {
     pair<int, vector<person*> > act = make_pair(0, vector<person*>());
     if (act.first == 0) {
-        this -> attack(act.second);
+//        this -> attack(act.second);
     } else {
-        this -> skill(act.second);
+//        this -> skill(act.second);
     }
 }
 
@@ -165,26 +166,26 @@ void Boss1::action(my_genshin* game)
 }
 
 void my_genshin::set_player(){
-    players.push_back(new Player(0, 15, 2, 0.8));
-    players.push_back(new Player(1, 12,3, 0.6));
-    players.push_back(new Player(2, 7, 7, 0.9));
-    players.push_back(new Player(3, 10, 1, 0.3));
+    players.push_back(new Qiqi(0, 15, 2, 0.8));
+    players.push_back(new Keqin(1, 12,3, 0.6));
+    players.push_back(new Laoyang(2, 7, 7, 0.9));
+    players.push_back(new Zhongli(3, 10, 1, 0.3));
 }
 
 Monster* Make_boss(int level){
-    Monster* Boss = new Monster;
     if(level == 1){//yan kui qiuqiuwang
+        Boss1* Boss = new Boss1;
         Boss->shield_hp = Boss->shield = 4;
         Boss->hp = Boss->all_hp = 20;
         Boss->atk = 3;
         Boss->def = 0.1;
         Boss->element_type = 1;
         Boss->shield_time = 0;
+        return Boss;
     }
     if(level == 2){
 
     }
-    return Boss;
 }
 
 my_genshin::my_genshin(const int &LEVEL)
@@ -210,7 +211,7 @@ void my_genshin::run_game()
     lst_time = 100;
     while (1) {
         auto p = (*get_mv_list().begin());
-        p.second -> action();
+        p.second -> action(this);
 
         for (auto player : players)
             player->mv_len -= player->speed * p.first;
@@ -221,4 +222,4 @@ void my_genshin::run_game()
         }
         lst_time -= p.first;
     }
-}
+} 

@@ -7,21 +7,12 @@
 #include <QString>
 #include <QSound>
 
-Monster* Make_boss(int level);
-void gamewindow::set_player(){
-    player[0] = new Player(0, 15, 2, 0.8);
-    player[1] = new Player(1, 12,3,0.6);
-    player[2] = new Player(2, 7, 7, 0.9);
-    player[3] = new Player(3, 10, 1, 0.3);
-}
 
 gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::gamewindow)
 {
-    this->level = LEVEL;
-    this->set_player();
-    Boss = Make_boss(level);
+    game = new my_genshin(LEVEL);
     ui->setupUi(this);
 //UI Designed:
     ui->backButton->move(1520,20);
@@ -43,33 +34,17 @@ gamewindow::~gamewindow()
     delete ui;
 }
 
-Monster* Make_boss(int level){
-    Monster* Boss = new Monster;
-    if(level == 1){//yan kui qiuqiuwang
-        Boss->shield_hp = Boss->shield = 4;
-        Boss->hp = Boss->all_hp = 20;
-        Boss->atk = 3;
-        Boss->def = 0.1;
-        Boss->element_type = 1;
-        Boss->shield_time = 0;
-    }
-    if(level == 2){
-
-    }
-    return Boss;
-}
-
 void gamewindow::paintEvent(QPaintEvent* event){
     QPainter Painter(this);
     std::string string_hp[6];
-    int hp[5], shield_cv =CARD_W * Boss->shield / Boss->shield_hp;
+    int hp[5], shield_cv =CARD_W * game->Boss->shield / game->Boss->shield_hp;
     for(int i=0;i<4;i++){
-        hp[i] = CARD_W * player[i]->hp / player[i]->all_hp;
-        string_hp[i] = std::to_string((int)player[i]->hp) + "/" + std::to_string((int)player[i]->all_hp);
+        hp[i] = CARD_W * game->players[i]->hp / game->players[i]->all_hp;
+        string_hp[i] = std::to_string((int)game->players[i]->hp) + "/" + std::to_string((int)game->players[i]->all_hp);
     }
-    hp[4] = CARD_W * Boss->hp / Boss->all_hp;
-    string_hp[4] = std::to_string((int)Boss->hp) + "/" + std::to_string((int)Boss->all_hp);
-    string_hp[5] = std::to_string((int)Boss->shield) + "/" + std::to_string((int)Boss->shield_hp);
+    hp[4] = CARD_W * game->Boss->hp / game->Boss->all_hp;
+    string_hp[4] = std::to_string((int)game->Boss->hp) + "/" + std::to_string((int)game->Boss->all_hp);
+    string_hp[5] = std::to_string((int)game->Boss->shield) + "/" + std::to_string((int)game->Boss->shield_hp);
 
     QRectF rect1(C1_W,C1_H-15,CARD_W,15);
     QRectF rect2(C2_W,C1_H-15,CARD_W,15);
@@ -104,7 +79,7 @@ void gamewindow::paintEvent(QPaintEvent* event){
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
     Painter.drawRect(rect4_hp);
     Painter.drawText(rect4, Qt::AlignHCenter, QString::fromStdString(string_hp[3]));
-    std::string Boss_name = ":/image/images/boss" +std::to_string(level) + ".png";
+    std::string Boss_name = ":/image/images/boss" +std::to_string(game->level) + ".png";
     QString boss_name = QString::fromStdString(Boss_name);
     Painter.drawPixmap(BOSS_W,BOSS_H,CARD_W,CARD_H,QPixmap(boss_name));
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
@@ -113,8 +88,8 @@ void gamewindow::paintEvent(QPaintEvent* event){
     Painter.setBrush(QBrush(Qt::gray));
     Painter.drawRect(rect6_hp);
     Painter.drawText(rect6, Qt::AlignHCenter, QString::fromStdString(string_hp[5]));
-    if(~Boss->has_element){
-        std::string element_name = ":/image/images/element" + std::to_string(Boss->has_element);
+    if(~game->Boss->has_element){
+        std::string element_name = ":/image/images/element" + std::to_string(game->Boss->has_element);
         Painter.drawPixmap(BOSS_W,BOSS_H - 60, 30,30,QString::fromStdString(element_name));
     }
 }

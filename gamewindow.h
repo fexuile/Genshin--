@@ -14,6 +14,7 @@ class gamewindow : public QWidget
     Q_OBJECT
 
 public:
+    my_genshin *game;
     int level;
     explicit gamewindow(int LEVEL = 1, QWidget *parent = nullptr);
     void set_player();
@@ -26,8 +27,6 @@ signals:
 private:
     Ui::gamewindow *ui;
     QLabel *Background;
-    Monster* Boss;
-    Player* player[4];
 };
 
 #endif // GAMEWINDOW_H

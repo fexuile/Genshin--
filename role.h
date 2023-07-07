@@ -31,7 +31,7 @@ public:
     int atk;
     double def;
     virtual void under_attack(person* enemy)=0;
-    virtual void action(); //获取决策（从客户端/bot）
+    virtual void action(my_genshin* game)=0; //获取决策（从客户端/bot）
     virtual void end_round(); //回合结束
 };
 
@@ -40,11 +40,8 @@ public:
     Player(){}
     Player(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100);
     virtual void under_attack(person* enemy);
-    virtual void attack();
-    virtual void skill();
-    virtual void action();
     virtual void attack(vector<person*> enemys);
-    virtual void skill(vector<person*> enemys) ;
+    virtual void skill(vector<person*> enemys){}
     virtual void action(my_genshin* game);
 };
 
@@ -52,30 +49,70 @@ public:
 class Qiqi:public Player {
 public:
     //技能：回复单体生命值
-    virtual void skill(vector<person*> players);
+    Qiqi(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        element_type = ELEMENT;
+        hp = all_hp = ALL_HP;
+        atk = ATK;
+        def = DEF;
+        speed = SPEED;
+        mv_len = 1e4 / speed;
+    }
+    void skill(vector<person*> players);
 };
 
 //技能：指定我方单体使其行动提前100%并增加攻击力2回合
 class Keqin:public Player {
     public:
+    Keqin(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        element_type = ELEMENT;
+        hp = all_hp = ALL_HP;
+        atk = ATK;
+        def = DEF;
+        speed = SPEED;
+        mv_len = 1e4 / speed;
+    }
     virtual void skill(vector<person*> players);
 };
 
 //技能：对敌方全体造成伤害并减速30%
 class Laoyang:public Player {
     public:
+    Laoyang(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        element_type = ELEMENT;
+        hp = all_hp = ALL_HP;
+        atk = ATK;
+        def = DEF;
+        speed = SPEED;
+        mv_len = 1e4 / speed;
+    }
     virtual void skill(vector<person*> enemys);
 };
 
 //技能：使我方全体角色减伤30%,持续2回合
 class Zhongli:public Player {
     public:
+    Zhongli(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        element_type = ELEMENT;
+        hp = all_hp = ALL_HP;
+        atk = ATK;
+        def = DEF;
+        speed = SPEED;
+        mv_len = 1e4 / speed;
+    }
     virtual void skill(vector<person*> players);
 };
 
 //技能：使我方全体角色加速30%,持续2回合
 class Xinhai:public Player {
     public:
+    Xinhai(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        element_type = ELEMENT;
+        hp = all_hp = ALL_HP;
+        atk = ATK;
+        def = DEF;
+        speed = SPEED;
+        mv_len = 1e4 / speed;
+    }
     virtual void skill(vector<person*> players);
 };
 
@@ -87,9 +124,9 @@ public:
 
     virtual void under_attack(person* enemy);
     void SHIELD_BUILD();
-    virtual void attack();
-    virtual void skill();
-    virtual void action();
+    virtual void attack(){}
+    virtual void skill(){}
+    virtual void action(){}
 };
 
 class Boss1:public Monster{
@@ -98,7 +135,7 @@ public:
     Boss1(){}
     Boss1(int ELEMENT,int ALL_HP,int ATK,int DEF,int SHIELD);
 
-    virtual void under_attack(person* enemy);
+    virtual void under_attack(person* enemy){}
     void SHIELD_BUILD();
     void attack(vector<person*> enemys);
     void skill(vector<person*> enemys);
@@ -111,7 +148,7 @@ class my_genshin
 public:
     int level;
     int round, lst_time;
-    person* Boss;
+    Monster* Boss;
     vector<person*> players;
 
     my_genshin(const int &LEVEL);
