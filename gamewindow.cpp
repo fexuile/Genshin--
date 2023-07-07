@@ -34,7 +34,19 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
                 ClickSound->play();
                 emit closeWindow();
             });
+    connect(ui->A,&QPushButton::released,this,&gamewindow::A_attack);
+    connect(ui->R,&QPushButton::released,this,&gamewindow::R_attack);
+}
 
+void gamewindow::A_attack(){
+
+}
+
+void gamewindow::R_attack(){
+
+}
+
+void gamewindow::Boss_attack(){
 
 }
 

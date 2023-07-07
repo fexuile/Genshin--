@@ -18,6 +18,9 @@ public:
     int level;
     explicit gamewindow(int LEVEL = 1, QWidget *parent = nullptr);
     void set_player();
+    void A_attack();
+    void R_attack();
+    void Boss_attack();
     ~gamewindow();
 
 protected:
