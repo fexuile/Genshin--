@@ -154,6 +154,7 @@ class my_genshin
 public:
     int level;
     int round, lst_time;
+    int skill_points;
     Monster* Boss;
     vector<person*> players;
 

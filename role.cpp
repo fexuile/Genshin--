@@ -160,8 +160,12 @@ void Boss1::action(my_genshin* game)
     pair<int, vector<person*> > act = boss1_bot::get_action(game, this);
     if (act.first == 0) {
         attack(act.second);
+        ++game -> skill_points;
     } else {
+    	if (game -> skill_points <= 0)
+        	qWarning("skill points fault : have no skill points");    		
         skill(act.second);
+        --game -> skill_points;
     }
 }
 
@@ -210,6 +214,7 @@ void my_genshin::run_game()
 {
     round = 0;
     lst_time = 100;
+    skill_points = 3; 
     while (1) {
         auto p = (*get_mv_list().begin());
         p.second -> action(this);
