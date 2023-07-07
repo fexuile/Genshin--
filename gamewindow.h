@@ -20,6 +20,7 @@ public:
     void set_player();
     void A_attack();
     void R_attack();
+    void update(int level);
     void Boss_attack();
     ~gamewindow();
 

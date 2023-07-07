@@ -41,18 +41,21 @@ void Player::under_attack(person* enemy)
 void Player::attack(vector<person*> enemys)
 {
     if (enemys.size() > 1)
-        qWarning("default attack fault : too many objects");    
-    for (auto enemy : enemys)
+        qWarning("default attack fault : too many objects");
+    for (auto enemy : enemys){
         enemy -> under_attack(this);
+    }
 }
 
-void Player::action(my_genshin* game)
+void Player::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(0, vector<person*>());
+    vector<person*>enemys;enemys.push_back(game->Boss);
+    pair<int, vector<person*> > act = make_pair(type, enemys);
     if (act.first == 0) {
-//        this -> attack(act.second);
+        this -> attack(act.second);
     } else {
-//        this -> skill(act.second);
+
+        this -> skill(act.second);
     }
 }
 
@@ -107,6 +110,8 @@ void Monster::under_attack(person* enemy)
     if (shield > 0) {
         hp -= 0.5 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
         shield -= enemy->atk * (1 + (~has_element ? shield_react[enemy->element_type][has_element] : 0));
+        hp = max(hp, 0.0);
+        shield = max(shield, 0.0);
         if (shield <= 0) {
             hp -= 0.2 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
             shield_time = 5;
@@ -122,17 +127,18 @@ void Monster::under_attack(person* enemy)
         else
             has_element = enemy->element_type;
     }
+    SHIELD_BUILD();
 }
 
 void Monster::SHIELD_BUILD()
 {
-    shield_time -= 1;
-    if (shield_time <= 0)
-        shield = shield_hp;
+    if(shield_time >=0) shield_time -= 1;
+    if (shield_time < 0) shield = shield_hp;
 }
 
 Boss1::Boss1(int ELEMENT, int ALL_HP, int ATK, int DEF, int SHIELD)
 {
+    name = "smallboss1";
     element_type = ELEMENT;
     hp = all_hp = ALL_HP;
     atk = ATK;
@@ -155,7 +161,7 @@ void Boss1::skill(vector<person*> enemys)
     atk /= 2;
 }
 
-void Boss1::action(my_genshin* game)
+void Boss1::action(int type, my_genshin* game)
 {
     pair<int, vector<person*> > act = boss1_bot::get_action(game, this);
     if (act.first == 0) {
@@ -170,25 +176,39 @@ void Boss1::action(my_genshin* game)
 }
 
 void my_genshin::set_player(){
+    players.clear();
     players.push_back(new Qiqi(0, 15, 2, 0.8));
     players.push_back(new Keqin(1, 12,3, 0.6));
     players.push_back(new Laoyang(2, 7, 7, 0.9));
     players.push_back(new Zhongli(3, 10, 1, 0.3));
 }
 
-Monster* Make_boss(int level){
+Monster* my_genshin::Make_boss(int level){
     if(level == 1){//yan kui qiuqiuwang
         Boss1* Boss = new Boss1;
+        Boss->name = "smallboss1";
         Boss->shield_hp = Boss->shield = 4;
         Boss->hp = Boss->all_hp = 20;
         Boss->atk = 3;
         Boss->def = 0.1;
         Boss->element_type = 1;
         Boss->shield_time = 0;
+        Boss->speed = 100;
+        Boss->mv_len = 1e4 / Boss->speed;
         return Boss;
     }
     if(level == 2){
-
+        Boss1* Boss = new Boss1;
+        Boss->name = "smallboss2";
+        Boss->shield_hp = Boss->shield = 4;
+        Boss->hp = Boss->all_hp = 20;
+        Boss->atk = 3;
+        Boss->def = 0.1;
+        Boss->element_type = 1;
+        Boss->shield_time = 0;
+        Boss->speed = 100;
+        Boss->mv_len = 1e4 / Boss->speed;
+        return Boss;
     }
 }
 
@@ -216,7 +236,7 @@ void my_genshin::run_game()
     skill_points = 3; 
     while (1) {
         auto p = (*get_mv_list().begin());
-        p.second -> action(this);
+//        p.second -> action(this);
 
         for (auto player : players)
             player->mv_len -= player->speed * p.first;
@@ -229,20 +249,20 @@ void my_genshin::run_game()
     }
 } 
 
-void my_genshin::save_game(my_genshin* game)
+void load_save::save_game(my_genshin* game)
 {
-    QString str = Qstring::fromStdString(to_string(game -> level));
-    QFile file(".\saved_game.txt");
+    QString str = QString::fromStdString(to_string(game -> level));
+    QFile file(".\saved_game");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
     file.write(str.toUtf8());
     file.close();
 }
 
-int my_genshin::load_game()
+int load_save::load_game()
 {
-    bool exist = QFile::exists(".\saved_game.txt");
-    if (!exist) return 1;
-    QFile file(".\saved_game.txt");
+    bool exist = QFile::exists(".\saved_game");
+    if (!exist) return 10;
+    QFile file(".\saved_game");
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream in(&file);
     QString line = in.readLine();

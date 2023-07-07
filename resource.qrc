@@ -18,11 +18,13 @@
         <file>images/element3.png</file>
         <file>images/player0.png</file>
         <file>images/player1.png</file>
-        <file>images/player2.png</file>
         <file>images/player3.png</file>
         <file>images/smallboss1.png</file>
         <file>images/A.png</file>
         <file>images/R.png</file>
+        <file>images/player2.png</file>
+        <file>images/smallboss2.png</file>
+        <file>images/boss2.png</file>
     </qresource>
     <qresource prefix="/media">
         <file>medias/clickbutton.wav</file>

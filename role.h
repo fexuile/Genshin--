@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <QFile>
+#include <QString>
 using namespace std;
 
 class my_genshin;
@@ -30,8 +32,9 @@ public:
     pair<double, int> add_speed, dec_speed, dec_dmg, vulnerable;
     int atk;
     double def;
+    string name;
     virtual void under_attack(person* enemy)=0;
-    virtual void action(my_genshin* game)=0; //获取决策（从客户端/bot）
+    virtual void action(int type, my_genshin* game)=0; //获取决策（从客户端/bot）
     virtual void end_round(); //回合结束
 };
 
@@ -42,7 +45,7 @@ public:
     virtual void under_attack(person* enemy);
     virtual void attack(vector<person*> enemys);
     virtual void skill(vector<person*> enemys){}
-    virtual void action(my_genshin* game);
+    virtual void action(int type, my_genshin* game);
 };
 
 //技能：回血
@@ -50,6 +53,7 @@ class Qiqi:public Player {
 public:
     //技能：回复单体生命值
     Qiqi(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -64,6 +68,7 @@ public:
 class Keqin:public Player {
     public:
     Keqin(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -78,6 +83,7 @@ class Keqin:public Player {
 class Laoyang:public Player {
     public:
     Laoyang(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -92,6 +98,7 @@ class Laoyang:public Player {
 class Zhongli:public Player {
     public:
     Zhongli(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -106,6 +113,7 @@ class Zhongli:public Player {
 class Xinhai:public Player {
     public:
     Xinhai(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+        name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
         atk = ATK;
@@ -135,11 +143,11 @@ public:
     Boss1(){}
     Boss1(int ELEMENT,int ALL_HP,int ATK,int DEF,int SHIELD);
 
-    virtual void under_attack(person* enemy){}
+//    virtual void under_attack(person* enemy){}
     void SHIELD_BUILD();
     void attack(vector<person*> enemys);
     void skill(vector<person*> enemys);
-    virtual void action(my_genshin* game);
+    virtual void action(int type,my_genshin* game);
 };
 
 //游戏主进程
@@ -155,8 +163,8 @@ public:
     my_genshin(const int &LEVEL);
     vector<pair<double, person*> > get_mv_list(); //获取行动条
     vector<pair<double, person*> > get_virtual_mv_list(); //获取假设行动条
+    Monster* Make_boss(int LEVEL);
     void run_game(); //游戏主进程
-private:
     void set_player();
 };
 

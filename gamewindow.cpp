@@ -6,6 +6,8 @@
 #include "config.h"
 #include <QString>
 #include <QSound>
+#include <QDebug>
+#include <QCloseEvent>
 
 
 gamewindow::gamewindow(int LEVEL, QWidget *parent) :
@@ -25,25 +27,51 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     ui->R->move(1460,800);
     ui->R->setFixedSize(ATTACK_BUTTON_WEIGHT,ATTACK_BUTTON_HEIGHT);
     ui->R->setStyleSheet("QPushButton{border-image: url(:/image/images/R.png);}");
-
-
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
-
     connect(ui->backButton,&QPushButton::released,[=]()
             {
                 ClickSound->play();
                 emit closeWindow();
             });
-    connect(ui->A,&QPushButton::released,this,&gamewindow::A_attack);
-    connect(ui->R,&QPushButton::released,this,&gamewindow::R_attack);
+    connect(ui->A,&QPushButton::clicked,this,&gamewindow::A_attack);
+    connect(ui->R,&QPushButton::clicked,this,&gamewindow::R_attack);
+}
+
+void gamewindow::update(int level){
+    qDebug()<<"update"<<level;
+    game->level = level;
+    game->set_player();
+    game->Boss = game->Make_boss(level);
+    qDebug()<<"update"<<QString::fromStdString(game->Boss->name);
+    repaint();
 }
 
 void gamewindow::A_attack(){
-
+    QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
+    ClickSound->play();
+    auto p = (*game->get_mv_list().begin());
+    p.second -> action(0, game);
+    for (auto player : game->players)
+        player->mv_len -= player->speed * p.first;
+    game->Boss -> mv_len -= game->Boss->speed * p.first;
+    p.second -> mv_len = 1e4;
+    p = (*game->get_mv_list().begin());
+    for(auto p:game->get_mv_list()){
+        qDebug()<<p.second->mv_len;
+    }
+    repaint();
 }
 
 void gamewindow::R_attack(){
-
+    QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
+    ClickSound->play();
+    auto p = (*game->get_mv_list().begin());
+    p.second -> action(1, game);
+    for (auto player : game->players)
+        player->mv_len -= player->speed * p.first;
+    game->Boss -> mv_len -= game->Boss->speed * p.first;
+    p.second -> mv_len = 1e4;
+    repaint();
 }
 
 void gamewindow::Boss_attack(){
