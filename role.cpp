@@ -185,7 +185,6 @@ Monster* Make_boss(int level){
         Boss->def = 0.1;
         Boss->element_type = 1;
         Boss->shield_time = 0;
-        Boss->name = "smallboss1";
         return Boss;
     }
     if(level == 2){
@@ -229,3 +228,23 @@ void my_genshin::run_game()
         lst_time -= p.first;
     }
 } 
+
+void my_genshin::save_game(my_genshin* game)
+{
+    QString str = Qstring::fromStdString(to_string(game -> level));
+    QFile file(".\saved_game.txt");
+    file.open(QIODevice::ReadWrite | QIODevice::Text);
+    file.write(str.toUtf8());
+    file.close();
+}
+
+int my_genshin::load_game()
+{
+    bool exist = QFile::exists(".\saved_game.txt");
+    if (!exist) return 1;
+    QFile file(".\saved_game.txt");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream in(&file);
+    QString line = in.readLine();
+    return stoi(line.toStdString());
+}
