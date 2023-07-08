@@ -51,7 +51,7 @@ void Player::attack(vector<person*> enemys)
 void Qiqi::skill(vector<person*> players)
 {
     for (auto player : players) {
-        player -> hp += all_hp * 0.1;
+        if(player->hp > 0) player -> hp += all_hp * 0.1;
         player -> hp = min(player -> hp, player -> all_hp);
     }
 }

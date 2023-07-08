@@ -14,8 +14,8 @@ mainwindows::mainwindows(QWidget *parent)
     this->setFixedSize(MAX_WINDOWS_WEIGHT,MAX_WINDOWS_HEIGHT);
     this->setWindowTitle("Genshin: Star Rail");
     this->setWindowIcon(QIcon(":/image/images/icon.png"));
-
     /*BackGround and BGM*/
+    ui->label->setGeometry(350,200,1000,200);
     Background = new QLabel(this);
     Background->setGeometry(0,0,MAX_WINDOWS_WEIGHT,MAX_WINDOWS_HEIGHT);
     Background->setPixmap(QPixmap(":/image/images/background.jpg"));
@@ -97,5 +97,3 @@ mainwindows::~mainwindows()
 {
     delete ui;
 }
-
-
