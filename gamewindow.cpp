@@ -18,7 +18,6 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
 {
     game = new my_genshin(LEVEL);
     level = LEVEL;
-    load_save::save_game(game);
     ui->setupUi(this);
 //UI Designed:
     ui->backButton->move(1520,20);

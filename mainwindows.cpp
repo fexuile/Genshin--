@@ -76,7 +76,10 @@ mainwindows::mainwindows(QWidget *parent)
             {
                 ui->stackedWidget->setCurrentWidget(ui->main);
             });
-
+    connect(Load_Game,&gamewindow::closeAll,[=]()
+            {
+                QTimer::singleShot(200,this,&QWidget::close);
+            });
     connect(ui->RuleButton,&QPushButton::clicked,[=](){
         ClickSound->play();
         ui->stackedWidget->setCurrentWidget(Rule_Page);
