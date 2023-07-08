@@ -207,10 +207,10 @@ void Boss1::action(int type, my_genshin* game)
 
 void my_genshin::set_player(){
     players.clear();
-    players.push_back(new Qiqi(0, 15, 2, 0.8));
-    players.push_back(new Xinhai(1, 12,3, 0.6));
-    players.push_back(new Laoyang(2, 7, 7, 0.9));
-    players.push_back(new Zhongli(3, 10, 1, 0.3));
+    players.push_back(new Qiqi(0, 15, 2, 0.8, 98));
+    players.push_back(new Xinhai(1, 12,3, 0.6, 106));
+    players.push_back(new Laoyang(2, 7, 7, 0.9, 120));
+    players.push_back(new Zhongli(3, 10, 1, 0.3, 92));
 }
 
 Monster* my_genshin::Make_boss(int level){
@@ -231,9 +231,9 @@ Monster* my_genshin::Make_boss(int level){
         Boss1* Boss = new Boss1;
         Boss->name = "smallboss2";
         Boss->shield_hp = Boss->shield = 4;
-        Boss->hp = Boss->all_hp = 40;
-        Boss->atk = 5;
-        Boss->def = 0.05;
+        Boss->hp = Boss->all_hp = 20;
+        Boss->atk = 3;
+        Boss->def = 0.1;
         Boss->element_type = 1;
         Boss->shield_time = 0;
         Boss->speed = 100;
@@ -302,7 +302,7 @@ void load_save::save_game(my_genshin* game)
 int load_save::load_game()
 {
     bool exist = QFile::exists(".\saved_game");
-    if (!exist) return 1;
+    if (!exist) return 10;
     QFile file(".\saved_game");
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream in(&file);
