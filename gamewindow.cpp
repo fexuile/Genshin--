@@ -2,13 +2,13 @@
 #include "ui_gamewindow.h"
 #include "role.h"
 #include <QPainter>
+#include <QElapsedTimer>
 #include <QLabel>
 #include "config.h"
 #include <QString>
 #include <QSound>
 #include <QDebug>
 #include <QCloseEvent>
-
 
 gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     QWidget(parent),
@@ -38,31 +38,41 @@ gamewindow::gamewindow(int LEVEL, QWidget *parent) :
 }
 
 void gamewindow::update(int level){
-    qDebug()<<"update"<<level;
     game->level = level;
     game->set_player();
     game->Boss = game->Make_boss(level);
-    qDebug()<<"update"<<QString::fromStdString(game->Boss->name);
     repaint();
+}
+
+
+void GameEnd(int flag){
+    QWidget*endwindow = new QWidget;
+    endwindow->show();
 }
 
 void gamewindow::A_attack(){
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
     ClickSound->play();
+    game->Skill_point = min(5, game->Skill_point + 1);
     auto p = (*game->get_mv_list().begin());
     p.second -> action(0, game);
     for (auto player : game->players)
         player->mv_len -= player->speed * p.first;
     game->Boss -> mv_len -= game->Boss->speed * p.first;
     p.second -> mv_len = 1e4;
+    if(game->judge_win() == 1)GameEnd(1);
     p = (*game->get_mv_list().begin());
-    for(auto p:game->get_mv_list()){
-        qDebug()<<p.second->mv_len;
+    if(p.second->name[0]=='s'){
+        repaint();
+        Boss_attack();
+        if(game->judge_win() == -1)GameEnd(-1);
     }
     repaint();
 }
 
 void gamewindow::R_attack(){
+    if(game->Skill_point == 0)return;
+    game->Skill_point -= 1;
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
     ClickSound->play();
     auto p = (*game->get_mv_list().begin());
@@ -71,12 +81,26 @@ void gamewindow::R_attack(){
         player->mv_len -= player->speed * p.first;
     game->Boss -> mv_len -= game->Boss->speed * p.first;
     p.second -> mv_len = 1e4;
+    if(game->judge_win() == 1)GameEnd(1);
+    p = (*game->get_mv_list().begin());
+    if(p.second->name[0]=='s'){
+        repaint();
+        Boss_attack();
+        if(game->judge_win() == -1)GameEnd(-1);
+    }
     repaint();
 }
 
 void gamewindow::Boss_attack(){
-
+    game->Boss->action(0,game);
+    auto p = (*game->get_mv_list().begin());
+    p.second -> action(1, game);
+    for (auto player : game->players)
+        player->mv_len -= player->speed * p.first;
+    game->Boss -> mv_len -= game->Boss->speed * p.first;
+    p.second -> mv_len = 1e4;
 }
+
 
 gamewindow::~gamewindow()
 {
@@ -150,4 +174,10 @@ void gamewindow::paintEvent(QPaintEvent* event){
         Painter.drawPixmap(X, Y,60,60,QString::fromStdString(name));
         Y += 80;
     }
+    Painter.setPen(Qt::red);
+    QFont ft = QFont(("黑体"),20);
+    ft.setBold(true);
+    Painter.setFont(ft);
+    string s = std::to_string(game->Skill_point) + '/' + std::to_string(5);
+    Painter.drawText(1460,900,QString::fromStdString(s));
 }

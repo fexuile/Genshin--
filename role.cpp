@@ -36,6 +36,7 @@ void Player::under_attack(person* enemy)
     if (vulnerable.second > 0)
         dec_hp *= (1 + vulnerable.first);
     hp -= enemy->atk * this->def;
+    hp = max(0.0, hp);
 }
 
 void Player::attack(vector<person*> enemys)
@@ -47,22 +48,8 @@ void Player::attack(vector<person*> enemys)
     }
 }
 
-// void Player::action(int type, my_genshin* game)
-// {
-//     vector<person*>enemys;enemys.push_back(game->Boss);
-//     pair<int, vector<person*> > act = make_pair(type, enemys);
-//     if (act.first == 0) {
-//         this -> attack(act.second);
-//     } else {
-
-//         this -> skill(act.second);
-//     }
-// }
-
 void Qiqi::skill(vector<person*> players)
 {
-    if (players.size() > 1)
-        qWarning("Qiqi skill fault : too many objects");    
     for (auto player : players) {
         player -> hp += all_hp * 0.1;
         player -> hp = min(player -> hp, player -> all_hp);
@@ -71,12 +58,11 @@ void Qiqi::skill(vector<person*> players)
 
 void Qiqi::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
-    if (act.first == 0) {
-        this -> attack(act.second);
+    if (type == 0) {
+        vector<person*>enemys;enemys.push_back(game->Boss);
+        this -> attack(enemys);
     } else {
-
-        this -> skill(act.second);
+        this -> skill(game -> players);
     }
 }
 
@@ -89,7 +75,7 @@ void Keqin::skill(vector<person*> players)
             player->atk += atk / 3;
         player -> add_atk = make_pair(atk / 3, 2);
         player -> mv_len = 0;
-    }    
+    }
 }
 
 void Keqin::action(int type, my_genshin* game)
@@ -113,13 +99,12 @@ void Laoyang::skill(vector<person*> enemys)
 
 void Laoyang::action(int type, my_genshin* game)
 {
-    vector<person*>enemys;enemys.push_back(game->Boss);
-    pair<int, vector<person*> > act = make_pair(type, enemys);
-    if (act.first == 0) {
-        this -> attack(act.second);
+    vector<person*>enemys;enemys.push_back( game -> Boss);
+    if (type == 0) {
+        this -> attack(enemys);
     } else {
 
-        this -> skill(act.second);
+        this -> skill(enemys);
     }
 }
 
@@ -127,17 +112,16 @@ void Zhongli::skill(vector<person*> players)
 {
     for (auto player : players) {
         player -> dec_dmg = make_pair(0.3, 2);
-    } 
+    }
 }
 
 void Zhongli::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
-    if (act.first == 0) {
-        this -> attack(act.second);
+    if (type == 0) {
+        vector<person*>enemys;enemys.push_back( game -> Boss);
+        this -> attack(enemys);
     } else {
-
-        this -> skill(act.second);
+        this -> skill(game->players);
     }
 }
 
@@ -147,16 +131,16 @@ void Xinhai::skill(vector<person*> players)
         if (player -> add_speed.second <= 0)
             player -> speed *= 1.3;
         player -> add_speed = make_pair(0.3, 2);
-    }    
+    }
 }
 
 void Xinhai::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = make_pair(type, game -> players);
-    if (act.first == 0) {
-        this -> attack(act.second);
+    if (type == 0) {
+        vector<person*>enemys;enemys.push_back( game -> Boss);
+        this -> attack(enemys);
     } else {
-        this -> skill(act.second);
+        this -> skill(game -> players);
     }
 }
 
@@ -177,10 +161,9 @@ void Monster::under_attack(person* enemy)
             has_element = enemy->element_type;
     } else {
         hp -= enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
-        if (~has_element)
-            has_element = -1;
-        else
-            has_element = enemy->element_type;
+        hp = max(hp, 0.0);
+        if (~has_element) has_element = -1;
+        else has_element = enemy->element_type;
     }
     SHIELD_BUILD();
 }
@@ -218,22 +201,14 @@ void Boss1::skill(vector<person*> enemys)
 
 void Boss1::action(int type, my_genshin* game)
 {
-    pair<int, vector<person*> > act = boss1_bot::get_action(game, this);
-    if (act.first == 0) {
-        attack(act.second);
-        ++game -> skill_points;
-    } else {
-    	if (game -> skill_points <= 0)
-        	qWarning("skill points fault : have no skill points");    		
-        skill(act.second);
-        --game -> skill_points;
-    }
+    vector<person*> actions = boss1_bot::get_action(game, this).second;
+    attack(actions);
 }
 
 void my_genshin::set_player(){
     players.clear();
     players.push_back(new Qiqi(0, 15, 2, 0.8));
-    players.push_back(new Keqin(1, 12,3, 0.6));
+    players.push_back(new Xinhai(1, 12,3, 0.6));
     players.push_back(new Laoyang(2, 7, 7, 0.9));
     players.push_back(new Zhongli(3, 10, 1, 0.3));
 }
@@ -272,6 +247,7 @@ my_genshin::my_genshin(const int &LEVEL)
     this->level = LEVEL;
     this->set_player();
     Boss = Make_boss(level);
+    this->Skill_point = 5;
 }
 
 vector<pair<double, person*> > my_genshin::get_mv_list()
@@ -288,15 +264,14 @@ void my_genshin::run_game()
 {
     round = 0;
     lst_time = 100;
-    skill_points = 3; 
     while (1) {
         auto p = (*get_mv_list().begin());
-//        p.second -> action(this);
+        //        p.second -> action(this);
 
         for (auto player : players)
             player->mv_len -= player->speed * p.first;
         Boss -> mv_len -= Boss->speed * p.first;
-        p.second -> mv_len = 1e4;    
+        p.second -> mv_len = 1e4;
         while (lst_time < p.first) {
             ++round; lst_time += 100;
         }
@@ -305,7 +280,7 @@ void my_genshin::run_game()
         //if (Boss -> hp < 0) return 1;
         //else if (get_mv_list().size == 1) return 0;
     }
-} 
+}
 
 int my_genshin::judge_win()
 {

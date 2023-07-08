@@ -11,14 +11,14 @@ using namespace std;
 class my_genshin;
 
 const double react[4][4]={{1,2,1.2,1.2},
-                          {1.2,1,2,2},
-                          {1.2,0.8,1,1.1},
-                          {1.2,2,1.2,1}
+    {1.2,1,2,2},
+    {1.2,0.8,1,1.1},
+    {1.2,2,1.2,1}
 };//反应倍率
 const double shield_react[4][4]={{0,1,1,0.5},
-                                 {0.5,0,1,1.5},
-                                 {0.5,0.8,0,0.2},
-                                 {0.2,1,0.5,0}
+    {0.5,0,1,1.5},
+    {0.5,0.8,0,0.2},
+    {0.2,1,0.5,0}
 };//破盾倍率
 class person{
 public:
@@ -52,7 +52,7 @@ public:
 class Qiqi:public Player {
 public:
     //技能：回复单体生命值
-    Qiqi(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+    Qiqi(int ELEMENT,int ALL_HP,int ATK,double DEF, int SPEED = 100){
         name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
@@ -67,8 +67,8 @@ public:
 
 //技能：指定我方单体使其行动提前100%并增加攻击力2回合
 class Keqin:public Player {
-    public:
-    Keqin(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+public:
+    Keqin(int ELEMENT,int ALL_HP,int ATK,double DEF, int SPEED = 100){
         name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
@@ -83,8 +83,8 @@ class Keqin:public Player {
 
 //技能：对敌方全体造成伤害并减速30%
 class Laoyang:public Player {
-    public:
-    Laoyang(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+public:
+    Laoyang(int ELEMENT,int ALL_HP,int ATK,double DEF, int SPEED = 100){
         name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
@@ -99,8 +99,8 @@ class Laoyang:public Player {
 
 //技能：使我方全体角色减伤30%,持续2回合
 class Zhongli:public Player {
-    public:
-    Zhongli(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+public:
+    Zhongli(int ELEMENT,int ALL_HP,int ATK,double DEF, int SPEED = 100){
         name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
@@ -115,8 +115,8 @@ class Zhongli:public Player {
 
 //技能：使我方全体角色加速30%,持续2回合
 class Xinhai:public Player {
-    public:
-    Xinhai(int ELEMENT,int ALL_HP,int ATK,int DEF, int SPEED = 100){
+public:
+    Xinhai(int ELEMENT,int ALL_HP,int ATK,double DEF, int SPEED = 100){
         name = "player" + std::to_string(ELEMENT);
         element_type = ELEMENT;
         hp = all_hp = ALL_HP;
@@ -139,7 +139,7 @@ public:
     void SHIELD_BUILD();
     virtual void attack(){}
     virtual void skill(){}
-    virtual void action(){}
+    virtual void action(int type,my_genshin* game){}
 };
 
 class Boss1:public Monster{
@@ -148,7 +148,7 @@ public:
     Boss1(){}
     Boss1(int ELEMENT,int ALL_HP,int ATK,int DEF,int SHIELD);
 
-//    virtual void under_attack(person* enemy){}
+    //    virtual void under_attack(person* enemy){}
     void SHIELD_BUILD();
     void attack(vector<person*> enemys);
     void skill(vector<person*> enemys);
@@ -161,7 +161,6 @@ class my_genshin
 public:
     int level;
     int round, lst_time;
-    int skill_points;
     Monster* Boss;
     vector<person*> players;
 
@@ -174,6 +173,7 @@ public:
 
     //1 赢 0 没结果 -1 输
     int judge_win();
+    int Skill_point;
 };
 
 namespace load_save
