@@ -9,12 +9,16 @@
 #include <QSound>
 #include <QDebug>
 #include <QCloseEvent>
+#include "endwindow.h"
+#include <QTimer>
 
 gamewindow::gamewindow(int LEVEL, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::gamewindow)
 {
     game = new my_genshin(LEVEL);
+    level = LEVEL;
+    load_save::save_game(game);
     ui->setupUi(this);
 //UI Designed:
     ui->backButton->move(1520,20);
@@ -41,13 +45,22 @@ void gamewindow::update(int level){
     game->level = level;
     game->set_player();
     game->Boss = game->Make_boss(level);
+    load_save::save_game(game);
     repaint();
 }
 
 
-void GameEnd(int flag){
-    QWidget*endwindow = new QWidget;
+void gamewindow::GameEnd(int flag){
+    EndWindow*endwindow = new EndWindow(game, flag);
     endwindow->show();
+    connect(endwindow,&EndWindow::quiting,this,[=](){
+        QTimer::singleShot(200,this,&QWidget::close);
+        emit closeAll();
+    });
+    connect(endwindow,&EndWindow::nexting,this,[=](){
+        update(game->level+1);
+        repaint();
+    });
 }
 
 void gamewindow::A_attack(){

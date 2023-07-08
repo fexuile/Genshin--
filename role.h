@@ -23,7 +23,7 @@ const double shield_react[4][4]={{0,1,1,0.5},
 class person{
 public:
     int element_type;
-    double hp,all_hp;
+    int hp,all_hp;
     //速度，行动条
     double speed, mv_len;
     //效果及其剩余回合数
@@ -131,7 +131,7 @@ public:
 
 class Monster:public person{
 public:
-    double shield,shield_hp;
+    int shield,shield_hp;
     int shield_time;
     int has_element = -1;
 

@@ -36,7 +36,7 @@ void Player::under_attack(person* enemy)
     if (vulnerable.second > 0)
         dec_hp *= (1 + vulnerable.first);
     hp -= enemy->atk * this->def;
-    hp = max(0.0, hp);
+    hp = max(0, hp);
 }
 
 void Player::attack(vector<person*> enemys)
@@ -149,8 +149,8 @@ void Monster::under_attack(person* enemy)
     if (shield > 0) {
         hp -= 0.5 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
         shield -= enemy->atk * (1 + (~has_element ? shield_react[enemy->element_type][has_element] : 0));
-        hp = max(hp, 0.0);
-        shield = max(shield, 0.0);
+        hp = max(hp, 0);
+        shield = max(shield, 0);
         if (shield <= 0) {
             hp -= 0.2 * enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
             shield_time = 5;
@@ -161,7 +161,7 @@ void Monster::under_attack(person* enemy)
             has_element = enemy->element_type;
     } else {
         hp -= enemy->atk * this->def * (~has_element ? react[enemy->element_type][has_element] : 1);
-        hp = max(hp, 0.0);
+        hp = max(hp, 0);
         if (~has_element) has_element = -1;
         else has_element = enemy->element_type;
     }
@@ -276,9 +276,6 @@ void my_genshin::run_game()
             ++round; lst_time += 100;
         }
         lst_time -= p.first;
-
-        //if (Boss -> hp < 0) return 1;
-        //else if (get_mv_list().size == 1) return 0;
     }
 }
 

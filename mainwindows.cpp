@@ -68,7 +68,10 @@ mainwindows::mainwindows(QWidget *parent)
             {
         ui->stackedWidget->setCurrentWidget(ui->main);
             });
-
+    connect(New_Game,&gamewindow::closeAll,[=]()
+            {
+                QTimer::singleShot(200,this,&QWidget::close);
+            });
     connect(Load_Game,&gamewindow::closeWindow,[=]()
             {
                 ui->stackedWidget->setCurrentWidget(ui->main);

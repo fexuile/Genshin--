@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     bot.cpp \
+    endwindow.cpp \
     gamewindow.cpp \
     main.cpp \
     mainwindows.cpp \
@@ -20,12 +21,14 @@ SOURCES += \
 HEADERS += \
     bot.h \
     config.h \
+    endwindow.h \
     gamewindow.h \
     mainwindows.h \
     role.h \
     rulewindow.h
 
 FORMS += \
+    endwindow.ui \
     gamewindow.ui \
     mainwindows.ui \
     rulewindow.ui

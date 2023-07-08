@@ -6,6 +6,8 @@ const int MAX_WINDOWS_HEIGHT = 1000;
 
 const int BUTTON_WEIGHT = 200;
 const int BUTTON_HEIGHT = 60;
+const int SMALL_BUTTON_WEIGHT = 130;
+const int SMALL_BUTTON_HEIGHT = 70;
 const int BACKBUTTON_WEIGHT = 60;
 const int BACKBUTTON_HEIGHT = 60;
 const int ATTACK_BUTTON_WEIGHT = 60;

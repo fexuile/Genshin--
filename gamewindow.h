@@ -22,12 +22,14 @@ public:
     void R_attack();
     void update(int level);
     void Boss_attack();
+    void GameEnd(int flag);
     ~gamewindow();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
 signals:
     void closeWindow(void);
+    void closeAll(void);
 private:
     Ui::gamewindow *ui;
     QLabel *Background;
