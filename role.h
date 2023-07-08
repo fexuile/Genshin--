@@ -173,7 +173,7 @@ public:
 
     //1 赢 0 没结果 -1 输
     int judge_win();
-    int Skill_point;
+    int Skill_point, Boss_skill;
 };
 
 namespace load_save

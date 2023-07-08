@@ -20,6 +20,7 @@ signals:
     void closeWindow(void);
     void quiting(void);
     void nexting(void);
+    void winning(void);
 private:
     Ui::EndWindow *ui;
 };

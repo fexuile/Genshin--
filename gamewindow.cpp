@@ -45,6 +45,8 @@ void gamewindow::update(int level){
     game->set_player();
     game->Boss = game->Make_boss(level);
     load_save::save_game(game);
+    this->game->Boss_skill = 3;
+    this->game->Skill_point = 5;
     repaint();
 }
 
@@ -60,9 +62,14 @@ void gamewindow::GameEnd(int flag){
         update(game->level+1);
         repaint();
     });
+    connect(endwindow,&EndWindow::winning,this,[=](){
+        QTimer::singleShot(200,this,&QWidget::close);
+        emit closeWindow();
+    });
 }
 
 void gamewindow::A_attack(){
+    if(game->judge_win()!=0)return;
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
     ClickSound->play();
     game->Skill_point = min(5, game->Skill_point + 1);
@@ -83,6 +90,7 @@ void gamewindow::A_attack(){
 }
 
 void gamewindow::R_attack(){
+    if(game->judge_win()!=0)return;
     if(game->Skill_point == 0)return;
     game->Skill_point -= 1;
     QSound *ClickSound=new QSound(":/media/medias/clickbutton.wav",this);
@@ -105,7 +113,9 @@ void gamewindow::R_attack(){
 
 void gamewindow::Boss_attack(){
     auto p = (*game->get_mv_list().begin());
-    game->Boss->action(0,game);
+    if(game->Boss_skill > 0)game->Boss->action(0,game);
+    else game->Boss->action(1,game);
+    game->Boss_skill = (game->Boss_skill + 2) % 3;
     for (auto player : game->players)
         player->mv_len -= player->speed * p.first;
     game->Boss -> mv_len -= game->Boss->speed * p.first;

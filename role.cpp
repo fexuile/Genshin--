@@ -248,6 +248,7 @@ my_genshin::my_genshin(const int &LEVEL)
     this->set_player();
     Boss = Make_boss(level);
     this->Skill_point = 5;
+    this->Boss_skill = 3;
 }
 
 vector<pair<double, person*> > my_genshin::get_mv_list()
