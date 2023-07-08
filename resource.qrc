@@ -25,6 +25,12 @@
         <file>images/player2.png</file>
         <file>images/smallboss2.png</file>
         <file>images/boss2.png</file>
+        <file>images/win.png</file>
+        <file>images/lose.png</file>
+        <file>images/dilukegg.png</file>
+        <file>images/laopogg.png</file>
+        <file>images/Monagg.png</file>
+        <file>images/yinggg.png</file>
     </qresource>
     <qresource prefix="/media">
         <file>medias/clickbutton.wav</file>

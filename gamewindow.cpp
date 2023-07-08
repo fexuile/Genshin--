@@ -104,9 +104,8 @@ void gamewindow::R_attack(){
 }
 
 void gamewindow::Boss_attack(){
-    game->Boss->action(0,game);
     auto p = (*game->get_mv_list().begin());
-    p.second -> action(1, game);
+    game->Boss->action(0,game);
     for (auto player : game->players)
         player->mv_len -= player->speed * p.first;
     game->Boss -> mv_len -= game->Boss->speed * p.first;
@@ -144,22 +143,26 @@ void gamewindow::paintEvent(QPaintEvent* event){
     QRectF rect5_hp(BOSS_W,BOSS_H-15,hp[4],15);
     QRectF rect6_hp(BOSS_W,BOSS_H-30,shield_cv,15);
 
-    Painter.drawPixmap(C1_W,C1_H,CARD_W,CARD_H,QPixmap(":/image/images/Mona.png"));
+    if(hp[0]>0)Painter.drawPixmap(C1_W,C1_H,CARD_W,CARD_H,QPixmap(":/image/images/Mona.png"));
+    else Painter.drawPixmap(C1_W,C1_H,CARD_W,CARD_H,QPixmap(":/image/images/Monagg.png"));
     Painter.drawPixmap(C1_W-30,C1_H,30,30,QPixmap(":/image/images/element0.png"));
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
     Painter.drawRect(rect1_hp);
     Painter.drawText(rect1, Qt::AlignHCenter, QString::fromStdString(string_hp[0]));
-    Painter.drawPixmap(C2_W,C2_H,CARD_W,CARD_H,QPixmap(":/image/images/diluke.png"));
+    if(hp[1]>0)Painter.drawPixmap(C2_W,C2_H,CARD_W,CARD_H,QPixmap(":/image/images/diluke.png"));
+    else Painter.drawPixmap(C2_W,C2_H,CARD_W,CARD_H,QPixmap(":/image/images/dilukegg.png"));
     Painter.drawPixmap(C2_W-30,C2_H,30,30,QPixmap(":/image/images/element1.png"));
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
     Painter.drawRect(rect2_hp);
     Painter.drawText(rect2, Qt::AlignHCenter, QString::fromStdString(string_hp[1]));
-    Painter.drawPixmap(C3_W,C3_H,CARD_W,CARD_H,QPixmap(":/image/images/laopo.png"));
+    if(hp[2]>0)Painter.drawPixmap(C3_W,C3_H,CARD_W,CARD_H,QPixmap(":/image/images/laopo.png"));
+    else Painter.drawPixmap(C3_W,C3_H,CARD_W,CARD_H,QPixmap(":/image/images/laopogg.png"));
     Painter.drawPixmap(C3_W-30,C3_H,30,30,QPixmap(":/image/images/element2.png"));
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
     Painter.drawRect(rect3_hp);
     Painter.drawText(rect3, Qt::AlignHCenter, QString::fromStdString(string_hp[2]));
-    Painter.drawPixmap(C4_W,C4_H,CARD_W,CARD_H,QPixmap(":/image/images/ying.png"));
+    if(hp[3]>0)Painter.drawPixmap(C4_W,C4_H,CARD_W,CARD_H,QPixmap(":/image/images/ying.png"));
+    else Painter.drawPixmap(C4_W,C4_H,CARD_W,CARD_H,QPixmap(":/image/images/yinggg.png"));
     Painter.drawPixmap(C4_W-30,C4_H,30,30,QPixmap(":/image/images/element3.png"));
     Painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
     Painter.drawRect(rect4_hp);
